@@ -91,6 +91,9 @@ void play(Melody melody = little_star, int buzzerPinNum = buzzerPin) {
         break;
     }
   }
+  // debug session
+  debug_println("Alarm stopped.");
+  /////
 }
 
 void ringAlarm() {
@@ -118,7 +121,6 @@ void setup() {
   // debug session
   debug_begin(9600);
   debug_println("Setup Complete.");
-  debug_println("Debug Session started: ");
   debug_println("Output Pin Configuration: ");
   debug_print("\tbuzzerPin = ");
   debug_println(buzzerPin);
@@ -131,6 +133,9 @@ void setup() {
   debug_println(time(NULL));
   debug_print("alarmRingTime = ");
   debug_println(alarmRingTime);
+  debug_print("maxAlarmTimes = ");
+  debug_println(maxAlarmTimes);
+  debug_println("Debug Session started: ");
   /////
 }
 
