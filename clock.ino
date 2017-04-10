@@ -1,5 +1,7 @@
 // clock.cpp / clock.ino
 
+#define __DEBUG
+
 #include "clock.h"
 
 #include <time.h>
@@ -10,33 +12,48 @@ bool isLEDLightOn = false;
 void ledLightOn(int ledPinNum = ledPin) {
   digitalWrite(ledPinNum, HIGH);
   if (ledPinNum == ledPin) isLEDLightOn = true;
+
+  // debug session
+  debug_println("LED Light on.");
+  /////
 }
 
 void ledLightOff(int ledPinNum = ledPin) {
   digitalWrite(ledPinNum, LOW);
   if (ledPinNum == ledPin) isLEDLightOn = false;
+
+  // debug session
+  debug_println("LED Light off.");
+  /////
 }
 
 time_t alarmRingTime;
 
 bool isTimeUp() {
   time_t currentTime = time(NULL);
-  return difftime(currentTime, alarmRingTime) >= 0;
+  time_t diffTime = difftime(currentTime, alarmRingTime);
+
+  // debug session
+  debug_print("Variable: time_t currentTime = ");
+  debug_print(currentTime);
+  debug_print("; difftime(currentTime, alarmRingTime) = ");
+  debug_println(diffTime);
+  /////
+
+  return diffTime >= 0;
 }
 
 bool isWaterLevelReached(int waterSensorPin = waterSensorInputPin) {
   double waterDepth = analogRead(waterSensorPin) / 410.0 * 4;
 
   // debug session
-  if (DEBUG) {
-    Serial.print("Calculated water depth from water sensor at pin ");
-    Serial.print(waterSensorPin);
-    Serial.print(": ");
-    Serial.println(waterDepth);
-  }
+  debug_print("Calculated water depth from water sensor at pin ");
+  debug_print(waterSensorPin);
+  debug_print(": ");
+  debug_println(waterDepth);
   /////
 
-  return abs(waterDepth - targetWaterLevel) <= WATER_SENSOR_THRESHOD;
+  return abs(waterDepth - targetWaterLevel) <= WATER_SENSOR_THRESHOLD;
 }
 
 void checkWaterLevel(time_t* timer) {
@@ -70,13 +87,16 @@ void play(Melody melody = little_star, int buzzerPinNum = buzzerPin) {
       // stop the tone playing:
       noTone(buzzerPinNum);
       checkWaterLevel(alarmStopTimer);
-      if (alarmStopTimer != nullptr && difftime(time(NULL), *alarmStopTimer) == 0)
+      if (alarmStopTimer != nullptr && difftime(time(NULL), *alarmStopTimer + ALARM_STOP_THRESHOLD) == 0)
         break;
     }
   }
 }
 
 void ringAlarm() {
+  // debug session
+  debug_println("Alarm triggered...");
+  /////
   play();
 }
 
@@ -87,16 +107,30 @@ bool isAlarmRang;
 
 void setup() {
   alarmRingTime = time(NULL) + alarmTimeRemainingSecs;
+
   pinMode(buzzerPin, OUTPUT);
   pinMode(ledPin, OUTPUT);
+  digitalWrite(ledPin, LOW);
+
   isAlarmTriggered = true;
   isAlarmRang = false;
 
   // debug session
-  if (DEBUG) {
-    Serial.begin(9600);
-    Serial.println("Debug Session started: ");
-  }
+  debug_begin(9600);
+  debug_println("Setup Complete.");
+  debug_println("Debug Session started: ");
+  debug_println("Output Pin Configuration: ");
+  debug_print("\tbuzzerPin = ");
+  debug_println(buzzerPin);
+  debug_print("\tledPin = ");
+  debug_println(ledPin);
+  debug_println("Analog Input Pin Configuration:");
+  debug_print("\twaterSensorInputPin = ");
+  debug_println(waterSensorInputPin);
+  debug_print("Current Time: ");
+  debug_println(time(NULL));
+  debug_print("alarmRingTime = ");
+  debug_println(alarmRingTime);
   /////
 }
 
