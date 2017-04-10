@@ -5,15 +5,6 @@
 #include <time.h>
 #include <math.h>
 
-const int WATER_SENSOR_THRESHOD = 0.05;
-
-const unsigned maxAlarmTimes = 10; // how many times the alarm rings
-const unsigned alarmTimeRemaining = 1; // unit: minute
-const unsigned long alarmTimeRemainingSecs = alarmTimeRemaining * 60;
-time_t alarmRingTime;
-
-const int targetWaterLevel = 3.8; // unit: cm (in fact: 玄学
-
 bool isLEDLightOn = false;
 
 void ledLightOn(int ledPinNum = ledPin) {
@@ -25,6 +16,8 @@ void ledLightOff(int ledPinNum = ledPin) {
   digitalWrite(ledPinNum, LOW);
   if (ledPinNum == ledPin) isLEDLightOn = false;
 }
+
+time_t alarmRingTime;
 
 bool isTimeUp() {
   time_t currentTime = time(NULL);
