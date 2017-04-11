@@ -66,7 +66,10 @@ bool isWaterLevelReached(int waterSensorPin = waterSensorInputPin) {
 }
 
 void checkWaterLevel(time_t* timer) {
-  if (isWaterLevelReached()) {
+  bool flag = isWaterLevelReached();
+  debug_print("isWaterLevelReached: ");
+  debug_println(flag);
+  if (flag) {
     if (timer == nullptr)
       *timer = getCurrentTime();
     ledLightOff();
@@ -113,6 +116,8 @@ void play(Melody melody = little_star, int buzzerPinNum = buzzerPin) {
   }
   // debug session
   ledLightOff();
+  noTone(buzzerPinNum);
+  digitalWrite(buzzerPin, HIGH);
   debug_println("Alarm stopped.");
   /////
 }
@@ -134,6 +139,7 @@ void setup() {
 
   pinMode(buzzerPin, OUTPUT);
   pinMode(ledPin, OUTPUT);
+  digitalWrite(buzzerPin, HIGH);
   digitalWrite(ledPin, LOW);
 
   isAlarmTriggered = true;
