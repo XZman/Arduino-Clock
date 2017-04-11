@@ -1,11 +1,11 @@
 // little_star.h
-#define LITTLE_STAR_H
+#define BIRTHDAY_SONG_H
 
 #ifndef PITCHES_H
 #include "pitches.h"
 #endif
 
-const Melody little_star = {
+const Melody birthday_song = {
   29,
   new int[29] {
     NOTE_G4,//5

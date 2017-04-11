@@ -21,6 +21,6 @@
 #ifndef MELODY_H
 #include "Melody.h"
 #endif
-#ifndef LITTLE_STAR_H
-#include "little_star.h"
+#ifndef BIRTHDAY_SONG_H
+#include "birthday_song.h"
 #endif

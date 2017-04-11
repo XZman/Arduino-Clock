@@ -1,6 +1,6 @@
 // clock.cpp / clock.ino
 
-#define __DEBUG
+//#define __DEBUG
 
 #include "clock.h"
 
@@ -79,7 +79,7 @@ void checkWaterLevel(time_t* timer) {
   }
 }
 
-void play(Melody melody = little_star, int buzzerPinNum = buzzerPin) {
+void play(Melody melody = birthday_song, int buzzerPinNum = buzzerPin) {
   time_t* alarmStopTimer = nullptr;
   unsigned playedTimes = 0;
   debug_print("music length: ");
