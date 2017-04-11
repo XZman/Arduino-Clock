@@ -4,8 +4,17 @@
 
 #include "clock.h"
 
-#include <time.h>
 #include <math.h>
+
+using time_t = long;
+
+time_t getCurrentTime() {
+  return millis();
+}
+
+time_t diffTime(time_t t1, time_t t2) {
+  return t1 - t2;
+}
 
 bool isLEDLightOn = false;
 
@@ -30,17 +39,17 @@ void ledLightOff(int ledPinNum = ledPin) {
 time_t alarmRingTime;
 
 bool isTimeUp() {
-  time_t currentTime = time(NULL);
-  time_t diffTime = difftime(currentTime, alarmRingTime);
+  time_t currentTime = getCurrentTime();
+  time_t diffeTime = diffTime(currentTime, alarmRingTime);
 
   // debug session
   debug_print("Variable: time_t currentTime = ");
   debug_print(currentTime);
-  debug_print("; difftime(currentTime, alarmRingTime) = ");
-  debug_println(diffTime);
+  debug_print("; diffTime(currentTime, alarmRingTime) = ");
+  debug_println(diffeTime);
   /////
 
-  return diffTime >= 0;
+  return diffeTime >= 0;
 }
 
 bool isWaterLevelReached(int waterSensorPin = waterSensorInputPin) {
@@ -59,7 +68,7 @@ bool isWaterLevelReached(int waterSensorPin = waterSensorInputPin) {
 void checkWaterLevel(time_t* timer) {
   if (isWaterLevelReached()) {
     if (timer == nullptr)
-      time(timer);
+      *timer = getCurrentTime();
     ledLightOff();
   } else {
     ledLightOn();
@@ -70,10 +79,16 @@ void checkWaterLevel(time_t* timer) {
 void play(Melody melody = little_star, int buzzerPinNum = buzzerPin) {
   time_t* alarmStopTimer = nullptr;
   unsigned playedTimes = 0;
+  debug_print("music length: ");
+  debug_println(melody.length);
   while (playedTimes++ < maxAlarmTimes) {
-    if (alarmStopTimer != nullptr && difftime(time(NULL), *alarmStopTimer) == 0)
+    debug_print("Times played: ");
+    debug_println(playedTimes);
+    if (alarmStopTimer != nullptr && diffTime(getCurrentTime(), *alarmStopTimer + ALARM_STOP_THRESHOLD) == 0)
       break;
-    for (int thisNote = 0; thisNote < little_star.length; thisNote++) {
+    for (int thisNote = 0; thisNote < melody.length; thisNote++) {
+      debug_println(melody.notes[thisNote]);
+      debug_println(melody.noteDurations[thisNote]);
       // to calculate the note duration, take one second
       // divided by the note type.
       //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
@@ -83,15 +98,21 @@ void play(Melody melody = little_star, int buzzerPinNum = buzzerPin) {
       // to distinguish the notes, set a minimum time between them.
       // the note's duration + 30% seems to work well:
       int pauseBetweenNotes = noteDuration * 1.30;
+      debug_println(pauseBetweenNotes);
       delay(pauseBetweenNotes);
       // stop the tone playing:
       noTone(buzzerPinNum);
+      debug_print("At note: ");
+      debug_println(thisNote);
       checkWaterLevel(alarmStopTimer);
-      if (alarmStopTimer != nullptr && difftime(time(NULL), *alarmStopTimer + ALARM_STOP_THRESHOLD) == 0)
+      debug_print("alarmStopTimer = ");
+      debug_println(alarmStopTimer == nullptr ? -1 : *alarmStopTimer);
+      if (alarmStopTimer != nullptr && diffTime(getCurrentTime(), *alarmStopTimer + ALARM_STOP_THRESHOLD) == 0)
         break;
     }
   }
   // debug session
+  ledLightOff();
   debug_println("Alarm stopped.");
   /////
 }
@@ -105,11 +126,11 @@ void ringAlarm() {
 
 //////////////////////////
 
-bool isAlarmTriggered;
-bool isAlarmRang;
+bool isAlarmTriggered = true;
+bool isAlarmRang = false;
 
 void setup() {
-  alarmRingTime = time(NULL) + alarmTimeRemainingSecs;
+  alarmRingTime = getCurrentTime() + alarmTimeRemainingMillis;
 
   pinMode(buzzerPin, OUTPUT);
   pinMode(ledPin, OUTPUT);
@@ -130,7 +151,7 @@ void setup() {
   debug_print("\twaterSensorInputPin = ");
   debug_println(waterSensorInputPin);
   debug_print("Current Time: ");
-  debug_println(time(NULL));
+  debug_println(getCurrentTime());
   debug_print("alarmRingTime = ");
   debug_println(alarmRingTime);
   debug_print("maxAlarmTimes = ");

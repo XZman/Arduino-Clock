@@ -6,5 +6,5 @@
 #endif
 
 const int buzzerPin = 13;
-const int ledPin = 3;
+const int ledPin = 12;
 const int waterSensorInputPin = A0;

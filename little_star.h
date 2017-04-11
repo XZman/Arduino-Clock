@@ -6,7 +6,8 @@
 #endif
 
 const Melody little_star = {
-  new int[30] {
+  29,
+  new int[29] {
     NOTE_G4,//5
     NOTE_G4,//5
     NOTE_A4,//6
@@ -37,7 +38,7 @@ const Melody little_star = {
     NOTE_C5,//1.
     0
   },
-  new int[30] {
+  new int[29] {
     8, 8, 4, 4, 4, 4,
     4,
     8, 8, 4, 4, 4, 4,

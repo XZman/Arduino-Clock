@@ -1,8 +1,12 @@
 // alarm_config.h
 #define ALARM_CONFIG_H
 
-const unsigned maxAlarmTimes = 10; // how many times the alarm rings
-const double alarmTimeRemaining = 1; // unit: minute; must be larger than 0;
-const unsigned long ALARM_STOP_THRESHOLD = 3;
+#ifndef ARDUINO_H
+#include "Arduino.h"
+#endif
 
-const unsigned long alarmTimeRemainingSecs = alarmTimeRemaining * 60;
+const int maxAlarmTimes = 10; // how many times the alarm rings
+const double alarmTimeRemaining = 0.1; // unit: minute; must be larger than 0;
+const int ALARM_STOP_THRESHOLD = 3000; // unit: ms
+
+const long alarmTimeRemainingMillis = alarmTimeRemaining * 60 * 1000;

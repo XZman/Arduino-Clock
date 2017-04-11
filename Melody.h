@@ -8,5 +8,5 @@ struct Melody {
   using size_t = unsigned long;
   size_t length;
 
-  Melody(int* _notes, int* _noteDurations);
+  Melody(unsigned len, int* _notes, int* _noteDurations);
 };
