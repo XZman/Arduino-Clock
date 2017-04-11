@@ -1,4 +1,9 @@
 // little_star.h
+#define LITTLE_STAR_H
+
+#ifndef PITCHES_H
+#include "pitches.h"
+#endif
 
 const Melody little_star = {
   new int[30] {

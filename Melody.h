@@ -1,4 +1,5 @@
 // Melody.h
+#define MELODY_H
 
 struct Melody {
   int* notes;

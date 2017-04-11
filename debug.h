@@ -1,4 +1,5 @@
 // debug.h
+#define DEBUG_H
 
 #ifdef __DEBUG
 #define debug_begin(s) Serial.begin(s)

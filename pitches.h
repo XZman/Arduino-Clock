@@ -1,4 +1,5 @@
 // pitches.h
+#define PITCHES_H
 
 /*************************************************
  * Public Constants
